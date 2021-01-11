@@ -1,0 +1,12 @@
+#cloud-config
+password: YOUR_PASSWORD
+chpasswd: { expire: False }
+ssh_pwauth: True
+preserve_hostname: false
+fqdn: ${hostname}
+bootcmd:
+  - mkdir /home/<YOUR USER>/.ssh
+  - chown -R <YOUR USER>:<YOUR USER> /home/<YOUR USER>/.ssh
+  - echo "<ANSIBLE_KEY> <ANSIBLE_USER>@<ANSIBLE_SERVER>" > /home/<YOUR_USER>/.ssh/authorized_keys
+
+

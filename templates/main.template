@@ -1,0 +1,40 @@
+provider "esxi" {
+  esxi_hostname      = "{{ esx }}"
+  esxi_password      = "{{ password }}"
+  version 	     = "~> 1.5"
+}
+provider "template" {
+  version = "~> 2.0"
+}
+data "template_file" "userdata" {
+  template = "${file("./userdata.tpl")}"
+  vars = {
+    hostname = "{{ vm_hostname }}"
+    ip_address = "{{ ip_address }}"
+  }
+}
+data "template_file" "metadata" {
+  template = "${file("./metadata.json")}"
+  vars = {
+    hostname = "{{ vm_hostname }}"
+  }
+}
+resource "esxi_guest" "{{ vm_hostname.split('.')[0] }}" {
+  guest_name         = "{{ vm_hostname }}"
+  disk_store         = "{{ datastore }}"
+  clone_from_vm      = "centos8"
+
+  network_interfaces = [
+    {
+      virtual_network = "{{ virtual_network }}"
+    },
+  ]
+  guestinfo = {
+    userdata.encoding = "gzip+base64"
+    userdata          = "${base64gzip(data.template_file.userdata.rendered)}"
+    metadata.encoding = "gzip+base64"
+    metadata          = "${base64gzip(data.template_file.metadata.rendered)}"
+  }
+}  
+
+

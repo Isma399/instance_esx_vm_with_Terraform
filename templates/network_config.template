@@ -1,0 +1,15 @@
+version: 1
+config:
+   - type: physical
+     name: eth0
+     subnets:
+        - type: static
+          address: {{ ip_address }} 
+          netmask: {{ netmask }} 
+          gateway: {{ gateway }}
+          dns_nameservers:
+            - {{ dns1 }}
+            - {{ dns2 }}
+          dns_search:
+            - {{ domain }}
+

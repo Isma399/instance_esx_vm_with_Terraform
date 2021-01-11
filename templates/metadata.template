@@ -1,0 +1,6 @@
+{
+  "network": "{{ network_yaml }}", 
+  "network.encoding": "gzip+base64",
+  "local-hostname": "{{vm_hostname}}",
+  "instance-id": "{{vm_hostname}}"
+}
